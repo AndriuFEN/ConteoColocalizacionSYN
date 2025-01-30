@@ -13,8 +13,8 @@ if "download_flag" not in st.session_state:
 if "prepared_flag" not in st.session_state:
     st.session_state.prepared_flag = False
 
-if os.getcwd().replace('\\', '/').split('/')[-1] != 'python':
-    os.chdir('python/')
+#if os.getcwd().replace('\\', '/').split('/')[-1] != 'python':
+#    os.chdir('python/')
 
 st.image(".configs/banner.png")
 
@@ -35,7 +35,7 @@ if not os.path.exists(outfolder):
 
 if not os.path.exists(ofolder):
     os.makedirs(ofolder)
-    
+
 #%% Cargar datos
 
 # url = 'https://drive.google.com/file/d/1PJlQGSkdYcaaK6B8Bhf1Hs2dzo-I00WI/view?usp=drive_link'
