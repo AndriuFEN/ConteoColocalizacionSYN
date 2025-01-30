@@ -72,7 +72,7 @@ def run(descomprimir=True, verbose=False):
 
     if descomprimir: descomprimir_zip(archivo_origen = archivo_origen, carpeta_destino=carpeta_destino)
     
-    if os.listdir(carpeta_destino)[0] != os.listdir(os.listdir('origen/')[0].split('.zip')[0]):
+    if os.listdir(carpeta_destino)[0] != os.listdir('origen/')[0].split('.zip')[0]:
         os.rename(carpeta_destino + os.listdir(carpeta_destino)[0], carpeta_destino + nombre_muestra)
     
     carpeta_input = carpeta_destino + nombre_muestra + '/'
