@@ -27,14 +27,18 @@ ofolder = basefolder + 'origen/'
 infolder = basefolder + 'input/'
 outfolder = basefolder + 'output/'
 
-if not os.path.exists(infolder):
-    os.makedirs(infolder)
+def remove_gitkeep(folder):
+    
+    for f in os.listdir(folder):
+        if f == '.gitkeep':
+            os.remove(folder + f)
+            break
 
-if not os.path.exists(outfolder):
-    os.makedirs(outfolder)
+    return True
 
-if not os.path.exists(ofolder):
-    os.makedirs(ofolder)
+remove_gitkeep(ofolder)
+remove_gitkeep(infolder)
+remove_gitkeep(outfolder)
 
 #%% Cargar datos
 
