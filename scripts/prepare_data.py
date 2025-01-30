@@ -83,7 +83,7 @@ def run(descomprimir=True, verbose=False):
     if descomprimir: 
 
         if len(os.listdir(carpeta_destino)) != 0:
-            os.shutil.rmtree(carpeta_destino)
+            shutil.rmtree(carpeta_destino)
             os.mkdir(carpeta_destino)
 
         descomprimir_zip(archivo_origen = archivo_origen, carpeta_destino=carpeta_destino)
@@ -148,6 +148,15 @@ def run(descomprimir=True, verbose=False):
         print(text)
         st.write(text)
 
+    carpeta_analisis_ruta = 'input/' + nombre_muestra + '/'
+    carpetas_analisis_originales = os.listdir(carpeta_analisis_ruta)
+
+    carpetas_analisis_map = {}
+    for c in carpetas_analisis_originales:
+        carpetas_analisis_map[carpeta_analisis_ruta + c.lower() + '/'] = carpeta_analisis_ruta + c + '/' 
+
+    print(carpetas_analisis_map)
+
     tablas = {}
 
     condiciones = list(dicto01.keys())
@@ -180,14 +189,13 @@ def run(descomprimir=True, verbose=False):
             for s in stacks:
                 
                 # busco carpeta
-                carpeta_analisis = 'input/'
-                carpeta_analisis = carpeta_analisis + nombre_muestra + '/' + nombre_muestra.lower()
+                carpeta_analisis = carpeta_analisis_ruta + nombre_muestra.lower()
                 carpeta_analisis = carpeta_analisis + ' ' + t.lower()
                 carpeta_analisis = carpeta_analisis + ' ' + 'cubre' + ' ' + c.lower()
                 carpeta_analisis = carpeta_analisis + ' ' + s.lower() + '/'
 
                 # leo archivos
-                archivos = os.listdir(carpeta_analisis)
+                archivos = os.listdir(carpetas_analisis_map[carpeta_analisis])
                 archivos = [x for x in archivos if not x.endswith(('.tif', '.csv'))]
                 archivos = [x for x in archivos if not 'Segmentacion' in x]
                 archivos = sorted(archivos)
@@ -197,7 +205,7 @@ def run(descomprimir=True, verbose=False):
                 a3 = archivos[2]
 
                 # extraigo informacion
-                with open(carpeta_analisis + a1, 'r') as f:
+                with open(carpetas_analisis_map[carpeta_analisis] + a1, 'r') as f:
                     a1_text = f.readlines()
                     a1_text = [int(x.replace('\n', '').split(' =')[-1]) for x in a1_text]
 
@@ -205,13 +213,13 @@ def run(descomprimir=True, verbose=False):
                 valor1 = a1_text[1]
                 valor3 = a1_text[2]
 
-                with open(carpeta_analisis + a2, 'r') as f:
+                with open(carpetas_analisis_map[carpeta_analisis] + a2, 'r') as f:
                     a2_text = f.readlines()
                     a2_text = [int(x.replace('\n', '').split(' =')[-1]) for x in a2_text]
 
                 valor5 = a2_text[2]
 
-                with open(carpeta_analisis + a3, 'r') as f:
+                with open(carpetas_analisis_map[carpeta_analisis] + a3, 'r') as f:
                     a3_text = f.readlines()
                     a3_text = [int(x.replace('\n', '').split(' =')[-1]) for x in a3_text]
 
