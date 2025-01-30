@@ -27,6 +27,15 @@ ofolder = basefolder + 'origen/'
 infolder = basefolder + 'input/'
 outfolder = basefolder + 'output/'
 
+if not os.path.exists(infolder):
+    os.makedirs(infolder)
+
+if not os.path.exists(outfolder):
+    os.makedirs(outfolder)
+
+if not os.path.exists(ofolder):
+    os.makedirs(ofolder)
+    
 #%% Cargar datos
 
 # url = 'https://drive.google.com/file/d/1PJlQGSkdYcaaK6B8Bhf1Hs2dzo-I00WI/view?usp=drive_link'
