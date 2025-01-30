@@ -3,9 +3,14 @@ def run(descomprimir=True, verbose=False):
     import os
     import pandas as pd
     import tqdm
+    import shutil
     import zipfile
-
-    if verbose: print('Trabajando archivo ...')
+    import streamlit as st
+    
+    if verbose: 
+        text = 'Trabajando archivo ...'
+        print(text)
+        st.write(text)
 
     #%% DEFINIR FUNCIONES
 
@@ -15,7 +20,6 @@ def run(descomprimir=True, verbose=False):
             zip_ref.extractall(carpeta_destino)
 
         return True
-
 
     def SAVE_EXCEL_MULTISHEET(container, path, engine='openpyxl', ind=False):
             
@@ -51,9 +55,12 @@ def run(descomprimir=True, verbose=False):
 
     #%% CONFIGURAR ENTORNO
 
-    if verbose: print('     ... configurando entorno')
+    if verbose: 
+        text = '     ... configurando entorno'
+        print(text)
+        st.write(text)
 
-    archivo_orgien_nombre =  os.listdir('origen/')[0]
+    archivo_origen_nombre =  os.listdir('origen/')[0]
     archivo_origen = 'origen/' + os.listdir('origen/')[0]
     carpeta_destino = 'input/'
 
@@ -68,25 +75,40 @@ def run(descomprimir=True, verbose=False):
 
     #%% DESCOMPRIMIR ARCHIVO
 
-    if verbose: print('     ... descomprimiento carpeta origen')
+    if verbose: 
+        text = '     ... descomprimiento carpeta origen'
+        print(text)
+        st.write(text)
 
-    if descomprimir: descomprimir_zip(archivo_origen = archivo_origen, carpeta_destino=carpeta_destino)
+    if descomprimir: 
+
+        if len(os.listdir(carpeta_destino)) != 0:
+            os.shutil.rmtree(carpeta_destino)
+            os.mkdir(carpeta_destino)
+
+        descomprimir_zip(archivo_origen = archivo_origen, carpeta_destino=carpeta_destino)
     
-    if os.listdir(carpeta_destino)[0] != os.listdir('origen/')[0].split('.zip')[0]:
-        os.rename(carpeta_destino + os.listdir(carpeta_destino)[0], carpeta_destino + nombre_muestra)
-    
+    carpetas_en_input = os.listdir(carpeta_destino)
+    nombre_descomprimido = carpetas_en_input[0]
+
+    if nombre_descomprimido != nombre_muestra:        
+        os.rename(carpeta_destino + nombre_descomprimido, carpeta_destino + nombre_muestra)
+
     carpeta_input = carpeta_destino + nombre_muestra + '/'
 
     #%% RECONOCER BUCLES
 
-    if verbose: print('     ... reconociendo bucles')
+    if verbose: 
+        text = '     ... reconociendo bucles'
+        print(text)
+        st.write(text)
 
     # reconocer carpetas
     carpetas = [x for x in os.listdir(carpeta_input) if not x.endswith('.nd2')]
 
     # reconocer condiciones
     condiciones = [x.split(nombre_muestra)[-1][1:] for x in carpetas]
-    condiciones = [x.split('cubre')[0][:-1] for x in condiciones]
+    condiciones = [x.lower().split('cubre')[0][:-1].upper() for x in condiciones]
     condiciones = list(set(condiciones))
 
     # reconocer cubres de cada condicion
@@ -96,7 +118,7 @@ def run(descomprimir=True, verbose=False):
 
         cubres = [x.split(nombre_muestra)[-1][1:] for x in carpetas]
         cubres = [x for x in cubres if cond in x]
-        cubres = [x.split('cubre')[-1][1:] for x in cubres]
+        cubres = [x.lower().split('cubre')[-1][1:].upper() for x in cubres]
         cubres = [x.split(' ')[0] for x in cubres]
         cubres = list(set(cubres))
 
@@ -114,14 +136,17 @@ def run(descomprimir=True, verbose=False):
         dicto02 = {}
         
         for cubre in cubres:
-            stacks_03 = [x.split(f'cubre {cubre}')[-1][1:] for x in stacks_02 if f'cubre {cubre}' in x]
+            stacks_03 = [x.lower().split(f'cubre {cubre}')[-1][1:] for x in stacks_02 if f'cubre {cubre}' in x.lower()]
             dicto02[cubre] = stacks_03
 
         dicto01[cond] = dicto02
 
     #%% PREPARAR TABLAS
 
-    if verbose: print('     ... preparando tablas')
+    if verbose: 
+        text = '     ... preparando tablas'
+        print(text)
+        st.write(text)
 
     tablas = {}
 
@@ -218,7 +243,10 @@ def run(descomprimir=True, verbose=False):
 
     #%% EXPORTAR EXCEL
 
-    if verbose: print('     ... exportando excel')
+    if verbose: 
+        text = '     ... exportando excel'
+        print(text)
+        st.write(text)
 
     cond_outtext = condiciones
     cond_outtext = [x for x in cond_outtext if 'Control' not in x]
@@ -231,5 +259,3 @@ def run(descomprimir=True, verbose=False):
     filename = f'output/{nombre_archivo}.xlsx'
     SAVE_EXCEL_MULTISHEET(tablas, filename)
 
-
-    print('     ... done!')

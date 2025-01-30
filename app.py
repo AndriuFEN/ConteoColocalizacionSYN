@@ -89,30 +89,18 @@ if st.session_state.download_flag:
     if st.button("Preparar datos"):
 
         with st.spinner('Preparando...'):
-
-            # Capturar la salida estándar
-            old_stdout = sys.stdout
-            sys.stdout = mystdout = io.StringIO()
             
             try: 
                 if on == False:
                     prepare_data.run(True, True)
                 else:
                     prepare_data.run(False, True)
-                
-                # Restaurar la salida estándar y mostrar el resultado
-                sys.stdout = old_stdout
-                st.text(mystdout.getvalue())
-                
+            
                 st.session_state.prepared_flag = True 
 
                 st.success('       ... done!')
                 
             except Exception as e:
-
-                # Restaurar la salida estándar y mostrar el resultado
-                sys.stdout = old_stdout
-                st.text(mystdout.getvalue())
 
                 st.error('       ... error!')
                 st.text(traceback.format_exc())
