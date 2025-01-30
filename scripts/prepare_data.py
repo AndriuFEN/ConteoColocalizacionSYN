@@ -181,10 +181,10 @@ def run(descomprimir=True, verbose=False):
                 
                 # busco carpeta
                 carpeta_analisis = 'input/'
-                carpeta_analisis = carpeta_analisis + nombre_muestra + '/' + nombre_muestra
-                carpeta_analisis = carpeta_analisis + ' ' + t
-                carpeta_analisis = carpeta_analisis + ' ' + 'cubre' + ' ' + c
-                carpeta_analisis = carpeta_analisis + ' ' + s + '/'
+                carpeta_analisis = carpeta_analisis + nombre_muestra + '/' + nombre_muestra.lower()
+                carpeta_analisis = carpeta_analisis + ' ' + t.lower()
+                carpeta_analisis = carpeta_analisis + ' ' + 'cubre' + ' ' + c.lower()
+                carpeta_analisis = carpeta_analisis + ' ' + s.lower() + '/'
 
                 # leo archivos
                 archivos = os.listdir(carpeta_analisis)
